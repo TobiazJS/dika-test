@@ -1,0 +1,174 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="flex flex-col p-6 sm:p-10">
+        <h1 class="text-2xl font-bold capitalize">{{mode}} employee</h1>
+        <form class="max-w-160 mt-4" [formGroup]="addEmployeeForm">
+            <mat-form-field class="w-full">
+                <mat-label>Username</mat-label>
+                <input matInput [formControlName]="'username'" />
+                <mat-error
+                    *ngIf="addEmployeeForm.get('username').errors?.required"
+                    >Username is required</mat-error
+                >
+            </mat-form-field>
+            <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+                <mat-form-field class="w-full">
+                    <mat-label>First name</mat-label>
+                    <input matInput [formControlName]="'firstName'" />
+                    <mat-error
+                        *ngIf="
+                            addEmployeeForm.get('firstName').errors?.required
+                        "
+                        >First name is required</mat-error
+                    >
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Last name</mat-label>
+                    <input matInput [formControlName]="'lastName'" />
+                    <mat-error
+                        *ngIf="addEmployeeForm.get('lastName').errors?.required"
+                        >Last name is required</mat-error
+                    >
+                </mat-form-field>
+            </div>
+            <mat-form-field class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput [formControlName]="'email'" />
+                <mat-error *ngIf="addEmployeeForm.get('email').errors?.required"
+                    >Email is required</mat-error
+                >
+                <mat-error
+                    *ngIf="addEmployeeForm.get('email').hasError('email')"
+                    >Please enter a valid email address</mat-error
+                >
+            </mat-form-field>
+            <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4">
+                <mat-form-field class="w-full">
+                    <mat-label>Birth date</mat-label>
+                    <input
+                        matInput
+                        [matDatepicker]="picker"
+                        [formControlName]="'birthDate'"
+                    />
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error
+                        *ngIf="
+                            addEmployeeForm.get('birthDate').errors?.required
+                        "
+                        >Birth date is required</mat-error
+                    >
+                </mat-form-field>
+                <mat-form-field
+                    *ngIf="mode === 'edit'; else isDetail"
+                    class="w-full"
+                >
+                    <mat-label>Basic salary</mat-label>
+                    <input
+                        matInput
+                        type="number"
+                        [formControlName]="'basicSalary'"
+                    />
+                    <mat-error
+                        *ngIf="
+                            addEmployeeForm.get('basicSalary').errors?.required
+                        "
+                        >Basic salary is required</mat-error
+                    >
+                </mat-form-field>
+                <ng-template #isDetail>
+                    <mat-form-field class="w-full">
+                        <mat-label>Basic salary</mat-label>
+                        <input
+                            disabled
+                            matInput
+                            type="string"
+                            [value]="salary | currency : 'Rp. '"
+                        />
+                    </mat-form-field>
+                </ng-template>
+            </div>
+            <mat-form-field class="w-full">
+                <mat-label>Status</mat-label>
+                <mat-select [formControlName]="'status'">
+                    <mat-option *ngFor="let state of status" [value]="state">{{
+                        state
+                    }}</mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="addEmployeeForm.get('status').errors?.required"
+                    >Status is required</mat-error
+                >
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label>Group</mat-label>
+                <input
+                    matInput
+                    [formControlName]="'group'"
+                    [matAutocomplete]="auto"
+                />
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-option
+                        *ngFor="let option of filteredOptions | async"
+                        [value]="option"
+                        >{{ option }}</mat-option
+                    >
+                </mat-autocomplete>
+                <mat-error *ngIf="addEmployeeForm.get('group').errors?.required"
+                    >Group is required</mat-error
+                >
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label>Description</mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="desc"
+                    [formControlName]="'description'"
+                />
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="desc"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #desc></mat-datepicker>
+                <mat-error
+                    *ngIf="addEmployeeForm.get('description').errors?.required"
+                    >Description is required</mat-error
+                >
+            </mat-form-field>
+            <!-- Actions -->
+            <div
+                *ngIf="mode === 'edit'; else detailButton"
+                class="flex gap-4 items-center justify-end mt-4"
+            >
+                <button type="button" (click)="onCancel()">
+                    <ng-container>Cancel</ng-container>
+                </button>
+                <button
+                    mat-flat-button
+                    [color]="'primary'"
+                    [disabled]="!addEmployeeForm.valid"
+                    type="button"
+                    (click)="onSubmit()"
+                >
+                    <ng-container>Save</ng-container>
+                </button>
+            </div>
+            <ng-template #detailButton>
+                <div class="flex gap-4 items-center justify-end mt-4">
+                    <button
+                        mat-flat-button
+                        [color]="'primary'"
+                        type="button"
+                        (click)="onCancel()"
+                    >
+                        <ng-container>Ok</ng-container>
+                    </button>
+                </div>
+            </ng-template>
+        </form>
+    </div>
+</div>

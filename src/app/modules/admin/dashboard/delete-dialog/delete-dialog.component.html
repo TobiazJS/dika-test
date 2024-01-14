@@ -1,0 +1,8 @@
+<h2 mat-dialog-title class="text-center">Delete Confirmation</h2>
+<mat-dialog-content class="">
+    Are you sure to delete {{ uname }}?
+</mat-dialog-content>
+<mat-dialog-actions class="flex justify-end">
+    <button mat-button (click)="close(false)">Cancel</button>
+    <button mat-button cdkFocusInitial class="bg-red-500 text-white" (click)="close(true)">Delete</button>
+</mat-dialog-actions>
